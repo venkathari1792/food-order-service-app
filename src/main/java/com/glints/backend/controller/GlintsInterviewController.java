@@ -10,12 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.glints.backend.constants.ApplicationConstant;
 import com.glints.backend.constants.ApplicationEndpoint;
+import com.glints.backend.error.ErrorCode;
 import com.glints.backend.request.DataLoadRequest;
 import com.glints.backend.request.PurchaseOrderDetailsRequest;
 import com.glints.backend.request.RestaurantsRequest;
 import com.glints.backend.request.TransactionDetailsRequest;
 import com.glints.backend.request.UserDetailsRequest;
+import com.glints.backend.response.BaseResponseTO;
+import com.glints.backend.response.ResponseDataTO;
+import com.glints.backend.response.StatusTO;
 import com.glints.backend.response.TransactionCountResponse;
 import com.glints.backend.response.UserDetailsResponse;
 import com.glints.backend.service.GlintsLoadDataService;
@@ -39,98 +44,151 @@ public class GlintsInterviewController {
 	private GlintsTransactionService glintsTransactionService;
 
 	@GetMapping(value = ApplicationEndpoint.LOAD_DATA)
-	public void loadRestaurantData(@RequestBody(required = false) DataLoadRequest dataLoadRequest,
+	public BaseResponseTO<Boolean> loadData(@RequestBody(required = false) DataLoadRequest dataLoadRequest,
 			@PathVariable String type) {
+		Boolean response = null;
 		try {
-			glintsLoadDataService.loadData(dataLoadRequest, type);
+			response = glintsLoadDataService.loadData(dataLoadRequest, type);
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(false, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-
+		if (response) {
+			return new ResponseDataTO<>(response,
+					new StatusTO(200, "Data Loaded Successfully", ApplicationConstant.SUCCESS));
+		} else {
+			return new ResponseDataTO<>(response,
+					new StatusTO(200, "Invalid Input URL Specified", ApplicationConstant.FAILURE));
+		}
 	}
 
 	@PostMapping(value = ApplicationEndpoint.FETCH_OPEN_RESTAURANTS)
-	public List<String> fetchOpenRestaurants(@RequestBody RestaurantsRequest restaurantRequest) {
+	public BaseResponseTO<List<String>> fetchOpenRestaurants(@RequestBody RestaurantsRequest restaurantRequest) {
+		List<String> response = null;
 		try {
 			if (null != restaurantRequest) {
-				return glintsRestaurantService.fetchOpenRestaurants(restaurantRequest.getInputDate());
+				response = glintsRestaurantService.fetchOpenRestaurants(restaurantRequest.getInputDate());
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return null;
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
 
 	@PostMapping(value = ApplicationEndpoint.FETCH_RESTAURANTS_WORK_HOURS)
-	public Set<String> fetchRestaurantsByWorkHours(@RequestBody RestaurantsRequest restaurantRequest) {
+	public BaseResponseTO<Set<String>> fetchRestaurantsByWorkHours(@RequestBody RestaurantsRequest restaurantRequest) {
+		Set<String> response = null;
 		try {
 			if (null != restaurantRequest) {
-				return glintsRestaurantService.fetchRestaurantsByHours(restaurantRequest);
+				response = glintsRestaurantService.fetchRestaurantsByHours(restaurantRequest);
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return null;
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
 
 	@PostMapping(value = ApplicationEndpoint.FETCH_RESTAURANTS_BY_DISH_PRICE)
-	public Set<String> fetchRestaurantsByDishPrice(@RequestBody RestaurantsRequest restaurantRequest) {
+	public BaseResponseTO<Set<String>> fetchRestaurantsByDishPrice(@RequestBody RestaurantsRequest restaurantRequest) {
+		Set<String> response = null;
 		try {
 			if (null != restaurantRequest) {
-				return glintsRestaurantService.fetchRestaurantsByDishPrice(restaurantRequest);
+				response = glintsRestaurantService.fetchRestaurantsByDishPrice(restaurantRequest);
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return null;
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
 
 	@PostMapping(value = ApplicationEndpoint.FETCH_TOP_USERS)
-	public List<UserDetailsResponse> fetchTopUsers(@RequestBody UserDetailsRequest userDetailsRequest) {
+	public BaseResponseTO<List<UserDetailsResponse>> fetchTopUsers(@RequestBody UserDetailsRequest userDetailsRequest) {
+		List<UserDetailsResponse> response = null;
 		try {
 			if (null != userDetailsRequest) {
-				return glintsUserService.fetchTopUsers(userDetailsRequest);
+				response = glintsUserService.fetchTopUsers(userDetailsRequest);
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return null;
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
 
 	@PostMapping(value = ApplicationEndpoint.FETCH_BY_TRANSACTIONS)
-	public List<TransactionCountResponse> fetchPopularRestaurants (
+	public BaseResponseTO<List<TransactionCountResponse>> fetchPopularRestaurants(
 			@RequestBody TransactionDetailsRequest transactionDetailsRequest) {
+		List<TransactionCountResponse> response = null;
 		try {
 			if (null != transactionDetailsRequest) {
-				return glintsTransactionService.fetchPopularRestaurants(transactionDetailsRequest);
+				response = glintsTransactionService.fetchPopularRestaurants(transactionDetailsRequest);
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return null;
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
 
 	@PostMapping(value = ApplicationEndpoint.FETCH_TOTAL_USERS_BY_AMOUNT)
-	public UserDetailsResponse fetchTopUsersByAmount(@RequestBody UserDetailsRequest userDetailsRequest) {
+	public BaseResponseTO<UserDetailsResponse> fetchTopUsersByAmount(
+			@RequestBody UserDetailsRequest userDetailsRequest) {
+		UserDetailsResponse response = null;
 		try {
 			if (null != userDetailsRequest) {
-				return glintsUserService.fetchTopUsersByAmount(userDetailsRequest);
+				response = glintsUserService.fetchTopUsersByAmount(userDetailsRequest);
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return null;
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
-	
+
 	@PostMapping(value = ApplicationEndpoint.PLACE_ORDER)
-	public boolean placeOrder(@RequestBody PurchaseOrderDetailsRequest purchaseOrderDetailsRequest) {
+	public BaseResponseTO<Boolean> placeOrder(@RequestBody PurchaseOrderDetailsRequest purchaseOrderDetailsRequest) {
+		Boolean response = null;
 		try {
 			if (null != purchaseOrderDetailsRequest) {
-				return glintsTransactionService.placeOrder(purchaseOrderDetailsRequest);
+				response = glintsTransactionService.placeOrder(purchaseOrderDetailsRequest);
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
 			}
 		} catch (Exception ex) {
 			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(false, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
 		}
-		return false;
+		return new ResponseDataTO<>(response,
+				new StatusTO(200, "Placed Order Successfully", ApplicationConstant.SUCCESS));
 	}
 }

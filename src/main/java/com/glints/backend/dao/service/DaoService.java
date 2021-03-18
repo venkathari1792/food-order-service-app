@@ -45,4 +45,8 @@ public interface DaoService {
 	public void saveUserDetails(UserDetails userDetails);
 
 	public void saveRestaurantDetails(RestaurantDetails restaurantDetails);
+
+	public void deleteRestaurantData();
+
+	public void deleteUserData();
 }

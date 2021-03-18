@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.glints.backend.constants.ApplicationConstant;
 import com.glints.backend.dao.entity.RestaurantDetails;
 import com.glints.backend.dao.entity.UserDetails;
 import com.glints.backend.dao.service.DaoService;
+import com.glints.backend.error.ErrorCode;
 import com.glints.backend.request.DataLoadRequest;
-import com.glints.backend.response.DataLoadResponse;
 import com.glints.backend.util.CommonUtils;
 
 @Service
@@ -26,44 +24,43 @@ public class GlintsLoadDataServiceImpl implements GlintsLoadDataService {
 	private DaoService daoService;
 
 	@Override
-	public DataLoadResponse loadData(DataLoadRequest dataLoadRequest, String type)
-			throws JsonMappingException, JsonProcessingException {
+	public Boolean loadData(DataLoadRequest dataLoadRequest, String type) throws Exception {
 		String rawDataUrl = getRawDataUrl(dataLoadRequest, type);
 		if (!CommonUtils.isEmpty(rawDataUrl)) {
 			if (ApplicationConstant.RESTAURANT.equalsIgnoreCase(type)) {
+				daoService.deleteRestaurantData();
 				List<RestaurantDetails> restaurantDetailsList = getRestaurantDetailsList(rawDataUrl);
 				processRestaurantData(restaurantDetailsList);
 			} else if (ApplicationConstant.USER.equalsIgnoreCase(type)) {
+				daoService.deleteUserData();
 				List<UserDetails> userDetailsList = getUserDetailsList(rawDataUrl);
 				processUserData(userDetailsList);
 			}
+			return true;
 		} else {
-			// Exception Handling Scenario for Raw Data URL
+			return false;
 		}
-		return null;
 
 	}
 
-	private List<UserDetails> getUserDetailsList(String rawDataUrl) {
+	private List<UserDetails> getUserDetailsList(String rawDataUrl) throws Exception {
 		try {
 			return restApiService.getApiCall(rawDataUrl, null, new ParameterizedTypeReference<List<UserDetails>>() {
 			});
 		} catch (Exception ex) {
-			// Exception Handling Scenario for Raw Data URL
 			System.out.println("Exception Occured.....");
+			throw new Exception(ErrorCode.FETCH_DATA_ERROR.getDescription(), ex);
 		}
-		return null;
 	}
 
-	private List<RestaurantDetails> getRestaurantDetailsList(String url) {
+	private List<RestaurantDetails> getRestaurantDetailsList(String url) throws Exception {
 		try {
 			return restApiService.getApiCall(url, null, new ParameterizedTypeReference<List<RestaurantDetails>>() {
 			});
 		} catch (Exception ex) {
-			// Exception Handling Scenario for Raw Data URL
 			System.out.println("Exception Occured.....");
+			throw new Exception(ErrorCode.FETCH_DATA_ERROR.getDescription(), ex);
 		}
-		return null;
 	}
 
 	private <T> void processRestaurantData(List<RestaurantDetails> dataResponse) {

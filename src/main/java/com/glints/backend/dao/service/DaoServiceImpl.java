@@ -146,4 +146,15 @@ public class DaoServiceImpl implements DaoService {
 	public void saveRestaurantDetails(RestaurantDetails restaurantDetails) {
 		restuarantRepository.save(restaurantDetails);
 	}
+
+	@Override
+	public void deleteRestaurantData() {
+		restuarantRepository.deleteAll();
+		
+	}
+
+	@Override
+	public void deleteUserData() {
+		userDetailsRepository.deleteAll();
+	}
 }

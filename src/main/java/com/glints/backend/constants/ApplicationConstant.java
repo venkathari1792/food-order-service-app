@@ -36,6 +36,12 @@ public class ApplicationConstant {
 
 	public static final String TRANSACTION_COUNT = "TRANSACTION_COUNT";
 
-	public static final String TRANSACTION_AMOUNT = "TRANSACTION_AMOUNT"; 
+	public static final String TRANSACTION_AMOUNT = "TRANSACTION_AMOUNT";
+
+	public static final String CONTENT_DISPOSITION = "Content-Disposition";
+
+	public static final String SUCCESS = "SUCCESS"; 
+	
+	public static final String FAILURE = "FAILURE"; 
 
 }

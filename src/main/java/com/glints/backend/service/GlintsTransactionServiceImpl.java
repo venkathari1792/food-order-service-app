@@ -52,7 +52,7 @@ public class GlintsTransactionServiceImpl implements GlintsTransactionService {
 					itemOrderAmountMap);
 			updatePurchaseInfo(itemOrderAmountMap, totalOrderAmount, purchaseOrderDetailsRequest);
 		}
-		return false;
+		return true;
 	}
 
 	private void updatePurchaseInfo(Map<String, Double> itemOrderAmountMap, Double totalOrderAmount,
