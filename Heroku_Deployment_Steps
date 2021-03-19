@@ -1,0 +1,19 @@
+********************************************************************* HEROKU Deployment Steps and commands *******************************************************************
+
+To be executed with the folder which contains Dockerfile 
+
+********************************************************************* HEROKU Deployment Steps and commands *******************************************************************
+
+heroku login   --> Login with Web Credentials
+heroku container:login --> To deploy Heroku Containers
+heroku apps --> To Show apps
+heroku container:rm -a appname  -> Remove container 
+heroku container:push -a  appname  -> Push Image
+heroku container:release -a appname -> Publish the app to Cloud
+heroku open --> opens published app
+heroku logs --tail -a appname --> Tail Logs
+
+
+Addons can be added if required - MySQl other DB etc
+
+********************************************************************* HEROKU Deployment Steps and commands *******************************************************************
