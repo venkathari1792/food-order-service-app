@@ -1,4 +1,8 @@
-********************************************************************** Food Order Service - Application (Spring Boot Application) *****************************************
+----------------------------------------------------------------
+                                                                
+Food Order Service - Application (Spring Boot Application) 
+
+----------------------------------------------------------------
 
 This App is a Spring Boot backend application, which was designed to provide information about restaurant, menu and basic information about Users of the Application
 
@@ -12,4 +16,3 @@ venkathari1792@gmail.com
 
 Mobile : +65 81168546, +91 9994115726
 
-****************************************************************************************************************************************************************************
