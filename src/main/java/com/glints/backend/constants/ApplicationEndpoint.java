@@ -24,5 +24,8 @@ public class ApplicationEndpoint {
 
 
 	public static final String PLACE_ORDER = "/place-order";
+
+
+	public static final String SEARCH_BY_TERM = "/search-by-term";
 	
 }

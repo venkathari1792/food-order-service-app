@@ -26,6 +26,8 @@ public class RestaurantDetailsResponse implements Serializable {
 	private String restaurantName;
 
 	private Long noOfDishes;
+	
+	private String dishName;
 
 	public RestaurantDetailsResponse(Long noOfDishes, String restaurantName) {
 		this.noOfDishes = noOfDishes;
@@ -121,4 +123,12 @@ public class RestaurantDetailsResponse implements Serializable {
 		this.noOfDishes = noOfDishes;
 	}
 
+	public String getDishName() {
+		return dishName;
+	}
+
+	public void setDishName(String dishName) {
+		this.dishName = dishName;
+	}
+	
 }

@@ -20,6 +20,7 @@ import com.glints.backend.request.TransactionDetailsRequest;
 import com.glints.backend.request.UserDetailsRequest;
 import com.glints.backend.response.BaseResponseTO;
 import com.glints.backend.response.ResponseDataTO;
+import com.glints.backend.response.RestaurantDetailsResponse;
 import com.glints.backend.response.StatusTO;
 import com.glints.backend.response.TransactionCountResponse;
 import com.glints.backend.response.UserDetailsResponse;
@@ -190,5 +191,24 @@ public class GlintsInterviewController {
 		}
 		return new ResponseDataTO<>(response,
 				new StatusTO(200, "Placed Order Successfully", ApplicationConstant.SUCCESS));
+	}
+
+	@PostMapping(value = ApplicationEndpoint.SEARCH_BY_TERM)
+	public BaseResponseTO<RestaurantDetailsResponse> searchByRestaurantOrDishName(
+			@RequestBody RestaurantsRequest restaurantRequest) {
+		RestaurantDetailsResponse response = null;
+		try {
+			if (null != restaurantRequest) {
+				response = glintsRestaurantService.searchByRestaurantOrDishName(restaurantRequest.getSearchTerm());
+			} else {
+				return new ResponseDataTO<>(null,
+						new StatusTO(ErrorCode.INVALID_INPUT_FORMAT.getCode(), ApplicationConstant.FAILURE));
+			}
+		} catch (Exception ex) {
+			System.out.println("Exception Occured...");
+			return new ResponseDataTO<>(null, new StatusTO(ErrorCode.DEFAULT_SYSTEM_ERROR.getCode(),
+					ex.getLocalizedMessage(), ApplicationConstant.FAILURE));
+		}
+		return new ResponseDataTO<>(response, new StatusTO());
 	}
 }

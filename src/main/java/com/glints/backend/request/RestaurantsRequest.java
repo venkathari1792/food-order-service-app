@@ -22,6 +22,8 @@ public class RestaurantsRequest implements Serializable {
 	private Double toPrice;
 	
 	private Integer noOfDishes;
+	
+	private String searchTerm;
 
 	public String getInputDate() {
 		return inputDate;
@@ -77,6 +79,14 @@ public class RestaurantsRequest implements Serializable {
 
 	public void setNoOfDishes(Integer noOfDishes) {
 		this.noOfDishes = noOfDishes;
+	}
+
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 
 }

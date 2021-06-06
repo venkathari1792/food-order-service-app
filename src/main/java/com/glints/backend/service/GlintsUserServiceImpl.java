@@ -2,7 +2,10 @@ package com.glints.backend.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.glints.backend.constants.ApplicationConstant;

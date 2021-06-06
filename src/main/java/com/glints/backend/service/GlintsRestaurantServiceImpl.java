@@ -151,4 +151,9 @@ public class GlintsRestaurantServiceImpl implements GlintsRestaurantService {
 		restaurantList.add(restaurantDetails.getRestaurantName());
 	}
 
+	@Override
+	public RestaurantDetailsResponse searchByRestaurantOrDishName(String searchTerm) {
+		return null;
+	}
+
 }

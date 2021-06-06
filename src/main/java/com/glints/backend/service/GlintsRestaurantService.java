@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.glints.backend.request.RestaurantsRequest;
+import com.glints.backend.response.RestaurantDetailsResponse;
 
 public interface GlintsRestaurantService {
 
@@ -13,5 +14,7 @@ public interface GlintsRestaurantService {
 	public Set<String> fetchRestaurantsByHours(RestaurantsRequest restaurantsRequest);
 
 	public Set<String> fetchRestaurantsByDishPrice(RestaurantsRequest restaurantRequest);
+
+	public RestaurantDetailsResponse searchByRestaurantOrDishName(String searchTerm);
 
 }
